@@ -1,222 +1,222 @@
-# AI 客服系统
+# AICustomer
 
-> 基于 FastAPI + OpenAI + RAG 的智能客服解决方案
+<div align="center">
 
-## 🚀 技术栈
+智能 AI 客服后端，基于 FastAPI + OpenAI + RAG，支持知识库同步、搜索提示、会话历史与反馈闭环。
 
-### 核心框架
-- **Web 框架**: FastAPI 0.108.0 + Uvicorn
-- **AI 引擎**: OpenAI API (GPT)
-- **向量数据库**: ChromaDB 0.4.22+
-- **缓存存储**: Redis 5.0.1
-- **CMS 集成**: Strapi API
+<p>
+  <img src="https://img.shields.io/badge/Python-3.x-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/FastAPI-API-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI">
+  <img src="https://img.shields.io/badge/OpenAI-RAG-412991?style=flat-square&logo=openai&logoColor=white" alt="OpenAI">
+  <img src="https://img.shields.io/badge/ChromaDB-Vector_Search-F97316?style=flat-square" alt="ChromaDB">
+  <img src="https://img.shields.io/badge/Redis-Session_Cache-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis">
+  <img src="https://img.shields.io/badge/Strapi-Knowledge_Base-4945FF?style=flat-square&logo=strapi&logoColor=white" alt="Strapi">
+</p>
 
-### 数据处理
-- **文本分析**: Jieba 0.42.1 (中文分词)
-- **向量计算**: NumPy 1.26.4
-- **数据验证**: Pydantic 2.5.3
+</div>
 
-### 任务调度
-- **定时任务**: APScheduler 3.10.4
-- **自动更新**: Schedule 1.2.1
+## 项目概览
 
-## 📋 核心功能
+`AICustomer` 是一个面向业务知识库场景的 AI 客服服务端项目。它将 Strapi 中的知识内容同步到本地向量库，通过 RAG 生成更贴近业务语境的回答，并配合 Redis、搜索提示和反馈回流形成完整的客服闭环。
 
-### 🤖 智能对话
-- 基于 RAG (检索增强生成) 的智能问答
-- 上下文感知的多轮对话
-- 会话历史管理和持久化
+适合用于：
 
-### 🔍 智能检索
-- 向量语义搜索
-- 知识库实时更新
-- 搜索提示补全
+- 软件产品内嵌客服问答
+- FAQ / 帮助中心智能检索
+- 带知识库同步能力的企业客服系统
+- 需要保存会话与反馈数据的 AI 助手后端
 
-### 📊 反馈系统
-- 用户满意度收集
-- 反馈数据分析
-- 问答质量优化
+## 核心能力
 
-### ⚙️ 系统管理
-- 知识库增量/全量更新
-- 任务调度监控
-- 服务健康检查
+| 能力 | 说明 |
+| --- | --- |
+| RAG 智能问答 | 基于知识库检索结果生成回答，减少纯大模型幻觉 |
+| 知识库同步 | 支持启动时全量构建与接口触发的增量 / 全量更新 |
+| 搜索提示 | 根据用户输入返回问题补全建议，降低提问门槛 |
+| 会话历史 | 聊天记录写入 Redis，并异步回传 Strapi |
+| 反馈闭环 | 接收点赞 / 点踩反馈，关联会话上下文存档 |
+| 定时任务 | 默认每 30 分钟执行一次知识库更新任务 |
 
-## 🏗️ 系统架构
+## 架构示意
 
-### 架构总览
 ![系统架构图](pic/架构图.png)
 
-### 目录结构
+![UML 设计图](pic/UML.png)
+
+## 技术栈
+
+| 分类 | 方案 |
+| --- | --- |
+| Web 框架 | FastAPI、Uvicorn |
+| AI 能力 | OpenAI API |
+| 检索层 | ChromaDB、Jieba |
+| 缓存层 | Redis |
+| CMS / 内容源 | Strapi |
+| 调度 | `schedule`、APScheduler |
+| 数据建模 | Pydantic |
+
+## 项目结构
+
+```text
+AICustomer
+├── app
+│   ├── api
+│   │   └── routes.py
+│   ├── core
+│   │   └── config.py
+│   ├── models
+│   │   └── schemas.py
+│   ├── services
+│   │   ├── hint_service.py
+│   │   ├── openai_service.py
+│   │   ├── rag_service.py
+│   │   ├── redis_service.py
+│   │   ├── scheduler_service.py
+│   │   └── strapi_service.py
+│   └── main.py
+├── pic
+├── requirements.txt
+└── run_app.py
 ```
-├── app/
-│   ├── api/                    # API 路由层
-│   │   └── routes.py          # REST API 接口
-│   ├── core/                   # 核心配置
-│   │   └── config.py          # 环境配置管理
-│   ├── models/                 # 数据模型
-│   │   └── schemas.py         # Pydantic 数据模型
-│   ├── services/               # 业务服务层
-│   │   ├── openai_service.py  # OpenAI API 集成
-│   │   ├── rag_service.py     # RAG 检索服务
-│   │   ├── strapi_service.py  # Strapi CMS 集成
-│   │   ├── redis_service.py   # Redis 缓存服务
-│   │   ├── hint_service.py    # 搜索提示服务
-│   │   └── scheduler_service.py # 定时任务服务
-│   └── data/                   # 数据存储目录
-└── tests/                      # 测试用例
-```
 
-### UML 设计图
-![UML设计图](pic/UML.png)
+## 快速开始
 
-## 🔧 环境配置
+### 1. 安装依赖
 
-### 必需环境变量
 ```bash
-# OpenAI 配置
+git clone https://github.com/GavinWu326/AICustomer.git
+cd AICustomer
+pip install -r requirements.txt
+```
+
+### 2. 配置环境变量
+
+新建 `.env` 文件，至少补齐以下配置：
+
+```bash
+APP_NAME=AICustomer
+
 OPENAI_API_KEY=your_openai_api_key
 OPENAI_API_URL=your_openai_api_url
-OPENAI_AUTH_KEY=your_auth_key
+OPENAI_AUTH_KEY=your_openai_auth_key
 
-# Redis 配置
 REDIS_HOST=localhost
 REDIS_PORT=6379
-REDIS_PASSWORD=your_redis_password
+REDIS_DB=0
+REDIS_PASSWORD=
 
-# Strapi 配置
-STRAPI_API_URL=your_strapi_url
-STRAPI_API_TOKEN=your_strapi_token
-```
+STRAPI_API_URL=your_strapi_api_url
+STRAPI_API_TOKEN=your_strapi_api_token
 
-### 可选配置
-```bash
-# 调试模式
+LOCAL_STRAPI_API_URL=http://localhost:1337/
+LOCAL_STRAPI_API_TOKEN=
+
 DEBUG_MODE=false
 SKIP_STRAPI_FETCH=false
 SKIP_CHROMA_UPDATE=false
 CLEAR_CHROMA_ON_STARTUP=false
 ```
 
-## 🚀 快速开始
-
-### 1. 环境准备
-```bash
-# 克隆项目
-git clone <repository-url>
-cd AI-customer-service
-
-# 安装依赖
-pip install -r requirements.txt
-```
-
-### 2. 配置环境
-```bash
-# 复制环境变量模板
-cp .env.example .env
-
-# 编辑环境配置
-vim .env
-```
-
 ### 3. 启动服务
-```bash
-# 开发环境
-python run_app.py
 
-# 生产环境
+```bash
+python run_app.py
+```
+
+如果需要在启动前清空现有 ChromaDB 数据：
+
+```bash
+python run_app.py --clear-db
+```
+
+也可以直接使用 Uvicorn：
+
+```bash
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-## 📖 API 接口
+启动后可访问：
 
-### 聊天对话
+- `http://localhost:8000/`
+- `http://localhost:8000/docs`
+
+## 配置说明
+
+| 环境变量 | 必填 | 说明 |
+| --- | --- | --- |
+| `OPENAI_API_KEY` | 是 | OpenAI 接口密钥 |
+| `OPENAI_API_URL` | 是 | OpenAI 或兼容接口地址 |
+| `OPENAI_AUTH_KEY` | 否 | 额外鉴权字段，默认已内置 |
+| `REDIS_HOST` / `REDIS_PORT` / `REDIS_DB` | 是 | Redis 连接配置 |
+| `REDIS_PASSWORD` | 否 | Redis 密码 |
+| `STRAPI_API_URL` | 是 | 线上 Strapi 内容源地址 |
+| `STRAPI_API_TOKEN` | 否 | Strapi 访问令牌 |
+| `LOCAL_STRAPI_API_URL` | 否 | 本地 Strapi 地址 |
+| `LOCAL_STRAPI_API_TOKEN` | 否 | 本地 Strapi 访问令牌 |
+| `DEBUG_MODE` | 否 | 是否启用调试模式 |
+| `SKIP_STRAPI_FETCH` | 否 | 启动时跳过 Strapi 抓取 |
+| `SKIP_CHROMA_UPDATE` | 否 | 启动时跳过向量库更新 |
+| `CLEAR_CHROMA_ON_STARTUP` | 否 | 启动时清空 ChromaDB |
+
+## API 一览
+
+| 方法 | 路径 | 说明 |
+| --- | --- | --- |
+| `POST` | `/chat` | 发起对话，返回 AI 回复 |
+| `POST` | `/searchHint` | 获取输入补全建议 |
+| `POST` | `/feedback` | 提交用户满意度反馈 |
+| `POST` | `/update-knowledge` | 触发知识库增量更新 |
+| `POST` | `/update-knowledge/full` | 触发知识库全量重建 |
+| `POST` | `/refresh-search-hints` | 刷新搜索提示列表 |
+| `GET` | `/scheduler-jobs` | 查看当前调度任务状态 |
+| `GET` | `/` | 基础欢迎接口 |
+
+### 请求示例
+
 ```http
 POST /chat
 Content-Type: application/json
 
 {
-  "query": "用户问题",
-  "session_id": "会话ID"
+  "query": "如何重置密码？",
+  "session_id": "session-demo-001"
 }
 ```
 
-### 搜索提示
 ```http
 POST /searchHint
 Content-Type: application/json
 
 {
-  "query": "部分输入",
-  "limit": 20
+  "query": "如何导",
+  "limit": 10
 }
 ```
 
-### 用户反馈
 ```http
 POST /feedback
 Content-Type: application/json
 
 {
-  "satisfaction": "满意度",
-  "session_id": "会话ID",
-  "feedback_id": "反馈ID"
+  "satisfaction": "good",
+  "tag": "answered",
+  "commit": "问题已解决",
+  "session_id": "session-demo-001",
+  "feedback_id": "feedback-demo-001"
 }
 ```
 
-### 知识库管理
-```http
-# 增量更新
-POST /update-knowledge
+## 运行流程
 
-# 全量更新
-POST /update-knowledge/full
+服务启动时会按顺序执行以下动作：
 
-# 刷新搜索提示
-POST /refresh-search-hints
-```
+1. 根据环境变量决定是否清空 ChromaDB。
+2. 从 Strapi 拉取知识内容并生成本地 JSON 数据。
+3. 将解析后的知识写入 ChromaDB 向量库。
+4. 启动调度线程并初始化搜索提示服务。
 
-## 🧪 测试
+这意味着它不仅是一个对话接口，也是一个自带知识同步与运维入口的客服后端。
 
-```bash
-# 运行测试
-pytest
+## License
 
-# 测试覆盖率
-pytest --cov=app
-```
-
-## 📝 开发指南
-
-### 服务扩展
-1. 在 `app/services/` 创建新服务模块
-2. 在 `app/api/routes.py` 添加路由端点
-3. 在 `app/models/schemas.py` 定义数据模型
-
-### 定时任务
-通过 `scheduler_service.py` 添加定时任务：
-```python
-@scheduler.scheduled_job('cron', hour=2)
-def daily_update():
-    # 定时任务逻辑
-    pass
-```
-
-## 🔒 性能优化
-
-- **Redis 缓存**: 会话历史和频繁查询缓存
-- **向量检索**: ChromaDB 高效语义检索
-- **异步处理**: FastAPI 异步 I/O 操作
-- **连接池**: HTTP 客户端连接复用
-
-## 🌟 特性亮点
-
-- ✅ **高并发**: 异步处理架构支持高并发访问
-- ✅ **智能检索**: 语义向量检索提高答案准确性  
-- ✅ **实时更新**: 知识库自动同步和增量更新
-- ✅ **扩展性**: 模块化设计便于功能扩展
-- ✅ **监控**: 完整的日志和健康检查机制
-
-## 📄 许可证
-
-本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件 
+This project is licensed under the [MIT License](LICENSE).
